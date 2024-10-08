@@ -429,6 +429,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@vitejs/plugin-vue@^5.1.4",
+        "npm:matter-js@0.20",
         "npm:typescript@^5.5.3",
         "npm:vite@^5.4.8",
         "npm:vue-tsc@^2.1.6",
