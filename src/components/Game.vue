@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Matter from 'matter-js'
+import * as Matter from 'matter-js'
 
 const gameContainer = ref(null)
 
@@ -13,17 +13,31 @@ onMounted(() => {
 
   const engine = Engine.create()
 
+  if (!gameContainer.value) {
+    return
+  }
   const render = Render.create({
     element: gameContainer.value,
     engine: engine
   })
 
-  // two boxes and ground
-  const boxA = Bodies.rectangle(400, 200, 80, 80)
-  const boxB = Bodies.rectangle(450, 30, 80, 80)
-  const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true })
+  // Barriers
+  const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, restitution: 1 })
+  const leftWall = Bodies.rectangle(0, 300, 60, 600, { isStatic: true, restitution: 1 })
+  const rightWall = Bodies.rectangle(800, 300, 60, 600, { isStatic: true, restitution: 1 })
+  const ceiling = Bodies.rectangle(400, 0, 810, 60, { isStatic: true, restitution: 1 })
+  Composite.add(engine.world, [ground, leftWall, rightWall, ceiling])
 
-  Composite.add(engine.world, [boxA, boxB, ground])
+  // Controllable player paddles
+  const paddle1 = Bodies.rectangle(400, 500, 100, 20, { restitution: 1 })
+  const paddle2 = Bodies.rectangle(400, 100, 100, 20, { restitution: 1 })
+  Composite.add(engine.world, [paddle1, paddle2])
+
+  // Ball
+  const ball = Bodies.circle(400, 300, 20, { restitution: 1 })
+  Composite.add(engine.world, [ball])
+
+
 
   Render.run(render)
 
