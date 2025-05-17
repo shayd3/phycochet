@@ -92,12 +92,25 @@ export class Game {
     }
 
     private addShapeAt(x: number, y: number): void {
+
+      const randomColors = ['#f28c28', '#28f2c8', '#f228f2', '#28f228', '#2828f2'];
+      const randomColor = randomColors[Math.floor(Math.random() * randomColors.length)];
+
       const shapeOptions = {
         render: {
-          fillStyle: '#ff0000',
+          fillStyle: randomColor,
         }
       };
       const shape = Bodies.circle(x, y, 20, shapeOptions);
+
+      // Add some initial velocity
+      Body.setVelocity(shape, {
+        x: (Math.random() - 0.5) * 5,
+        y: (Math.random() - 0.5) * 5,
+      });
+
+      Body.setAngularVelocity(shape, (Math.random() - 0.5) * 0.2);
+
       World.add(this.engine.world, shape);
     }
 
