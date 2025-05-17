@@ -80,6 +80,34 @@ export class Game {
       // Add bodies to the world
       World.add(world, [ground, leftWall, rightWall]);
 
+      this.addRandomShapes();
+
+      this.canvas.addEventListener('click', (event) => {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        this.addShapeAt(x, y);
+      });
+
+    }
+
+    private addShapeAt(x: number, y: number): void {
+      const shapeOptions = {
+        render: {
+          fillStyle: '#ff0000',
+        }
+      };
+      const shape = Bodies.circle(x, y, 20, shapeOptions);
+      World.add(this.engine.world, shape);
+    }
+
+    private addRandomShapes(): void {
+      const numShapes = 10;
+      for (let i = 0; i < numShapes; i++) {
+        const x = Math.random() * this.canvas.width;
+        const y = Math.random() * (this.canvas.height - 100) + 50; // Avoid the ground
+        this.addShapeAt(x, y);
+      }
     }
 
     public start(): void {
