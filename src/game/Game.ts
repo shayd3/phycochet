@@ -1,4 +1,5 @@
 import * as Matter from 'matter-js';
+import { Paddle } from './Paddle';
 
 const Engine = Matter.Engine;
 const Render = Matter.Render;
@@ -12,6 +13,8 @@ export class Game {
     private engine: Matter.Engine;
     private runner: Matter.Runner;
     private render: Matter.Render;
+    private leftPaddle: Paddle;
+    private rightPaddle: Paddle;
 
     constructor(canvasId: string) {
       this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -38,14 +41,22 @@ export class Game {
       // Create runner
       this.runner = Runner.create();
 
-      // Set up the World
-      this.setupWorld();
+      // Create paddles
+      this.leftPaddle = new Paddle(
+        this.engine.world,
+        'left',
+        this.canvas.width,
+        this.canvas.height
+      );
+      this.rightPaddle = new Paddle(
+        this.engine.world,
+        'right',
+        this.canvas.width,
+        this.canvas.height);
 
-    }
-
-    private setupWorld() {
       this.createWalls();
     }
+
 
     private createWalls(): void {
 
@@ -54,7 +65,7 @@ export class Game {
         0,
         this.canvas.width,
         10,
-        { isStatic: true, render: { fillStyle: '#ffffff'}}
+        { isStatic: true, render: { fillStyle: '#949494'}}
       )
 
       const bottomWall = Bodies.rectangle(
@@ -62,7 +73,7 @@ export class Game {
         this.canvas.height,
         this.canvas.width,
         10,
-        { isStatic: true, render: { fillStyle: '#ffffff'}}
+        { isStatic: true, render: { fillStyle: '#949494'}}
       )
 
       // Add to world
