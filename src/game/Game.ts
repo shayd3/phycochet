@@ -44,51 +44,29 @@ export class Game {
     }
 
     private setupWorld() {
-      const world = this.engine.world;
+      this.createWalls();
+    }
 
-      // Create a ground
-      const groundX = this.canvas.width / 2;
-      const groundY = this.canvas.height - 10;
-      const groundWidth = this.canvas.width;
-      const groundHeight = 40;
-      const groundOptions = {
-        isStatic: true,
-        render: {
-          fillStyle: '#2e8555',
-        }
-      }
-      const ground = Bodies.rectangle( groundX, groundY, groundWidth, groundHeight, groundOptions);
+    private createWalls(): void {
 
-      // Create walls
-      const wallOptions = {
-        isStatic: true,
-        render: {
-          fillStyle: '#2e8555'
-        }
-      }
-      const wallY = this.canvas.height / 2;
-      const wallWidth = 40
-      const wallHeight = this.canvas.height;
+      const topWall = Bodies.rectangle(
+        this.canvas.width / 2,
+        0,
+        this.canvas.width,
+        10,
+        { isStatic: true, render: { fillStyle: '#ffffff'}}
+      )
 
-      const leftWallX = 0;
-      const rightWallX = this.canvas.width
+      const bottomWall = Bodies.rectangle(
+        this.canvas.width / 2,
+        this.canvas.height,
+        this.canvas.width,
+        10,
+        { isStatic: true, render: { fillStyle: '#ffffff'}}
+      )
 
-      const leftWall = Bodies.rectangle(leftWallX, wallY, wallWidth, wallHeight, wallOptions);
-      const rightWall = Bodies.rectangle(rightWallX, wallY, wallWidth, wallHeight, wallOptions);
-
-
-      // Add bodies to the world
-      World.add(world, [ground, leftWall, rightWall]);
-
-      this.addRandomShapes();
-
-      this.canvas.addEventListener('click', (event) => {
-        const rect = this.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        this.addShapeAt(x, y);
-      });
-
+      // Add to world
+      World.add(this.engine.world, [topWall, bottomWall]);
     }
 
     private addShapeAt(x: number, y: number): void {
