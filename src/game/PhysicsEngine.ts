@@ -5,7 +5,7 @@ export class PhysicsEngine {
     public world: Matter.World;
     public render: Matter.Render;
 
-    constructor(canvasId: string) {
+    constructor(canvas: HTMLCanvasElement) {
         this.engine = Matter.Engine.create({
             positionIterations: 10,
             velocityIterations: 10,
@@ -15,11 +15,6 @@ export class PhysicsEngine {
         });
 
         this.world = this.engine.world;
-
-        const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-        if (!canvas) {
-            throw new Error(`Canvas with id ${canvas} not found`);
-        }
 
         this.render = Matter.Render.create({
             canvas: canvas,

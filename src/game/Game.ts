@@ -1,18 +1,14 @@
 import * as Matter from 'matter-js';
 import { Paddle } from './Paddle';
+import { PhysicsEngine } from './PhysicsEngine';
+import { Ball } from './Ball';
 
-const Engine = Matter.Engine;
-const Render = Matter.Render;
-const World = Matter.World;
 const Bodies = Matter.Bodies;
-const Body = Matter.Body;
-const Runner = Matter.Runner;
 
 export class Game {
   private canvas: HTMLCanvasElement;
-  private engine: Matter.Engine;
-  private runner: Matter.Runner;
-  private render: Matter.Render;
+  private physics: PhysicsEngine;
+  private ball: Ball;
   private leftPaddle: Paddle;
   private rightPaddle: Paddle;
   private lastTime: number = 0;
@@ -24,33 +20,24 @@ export class Game {
       throw new Error(`Canvas with id ${canvasId} not found`);
     }
 
-    // Create engine
-    this.engine = Engine.create();
+    this.physics = new PhysicsEngine(this.canvas);
 
-    // Create renderer
-    this.render = Render.create({
-      engine: this.engine,
-      canvas: this.canvas,
-      options: {
-        width: this.canvas.width,
-        height: this.canvas.height,
-        wireframes: false,
-        background: '#222',
-      },
-    });
-
-    // Create runner
-    this.runner = Runner.create();
+    // Create Ball
+    this.ball = new Ball(
+      this.physics.world,
+      this.canvas.width / 2,
+      this.canvas.height / 2
+    )
 
     // Create paddles
     this.leftPaddle = new Paddle(
-      this.engine.world,
+      this.physics.world,
       'left',
       this.canvas.width,
       this.canvas.height
     );
     this.rightPaddle = new Paddle(
-      this.engine.world,
+      this.physics.world,
       'right',
       this.canvas.width,
       this.canvas.height);
@@ -81,7 +68,7 @@ export class Game {
     )
 
     // Add to world
-    World.add(this.engine.world, [topWall, bottomWall]);
+    Matter.Composite.add(this.physics.world, [topWall, bottomWall]);
   }
 
   private setupMouseInput(): void {
@@ -114,10 +101,9 @@ export class Game {
   }
 
   public start(): void {
-    // Run the renderer
-    Render.run(this.render);
-    // Run the engine
-    Runner.run(this.runner, this.engine);
+    this.physics.start();
+
+    this.ball.reset(this.canvas.width, this.canvas.height);
     console.log("Phycochet demo started!")
   }
 }
