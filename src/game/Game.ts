@@ -40,7 +40,8 @@ export class Game {
       this.physics.world,
       'right',
       this.canvas.width,
-      this.canvas.height);
+      this.canvas.height,
+      20, this.canvas.height);
 
 
     this.createWalls();

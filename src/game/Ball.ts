@@ -12,8 +12,8 @@ export class Ball {
     ) {
         this.body = Matter.Bodies.circle(x, y, radius, {
             restitution: 0.9, // Bounciness
-            friction: 0.05, // Surface friction
-            frictionAir: 0.001,
+            friction: 0, // Surface friction
+            frictionAir: 0,
             density: 0.001, // Density for mass calculation
             render: {
                 fillStyle: '#ffffff', // Ball color
