@@ -90,6 +90,8 @@ export class Game {
       this.leftPaddle.update(deltaTime);
       this.rightPaddle.update(deltaTime);
 
+      this.ball.update();
+
       requestAnimationFrame(gameLoop);
     };
 
